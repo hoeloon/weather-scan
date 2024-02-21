@@ -5,7 +5,7 @@ CSS Framework
 - Tailwind CSS
 
 Theme switcher
-- next-themes
+- next-themes (https://www.npmjs.com/package/next-themes)
 
 Component
 - Search
@@ -21,8 +21,20 @@ Component
 - History Item
     City, Country, Datetime, Search Button, Delete Button
 
-deployment
-- github page (https://medium.com/frontendweb/how-to-deploy-a-nextjs-app-to-github-pages-1de4f6ed762e)
+Deployment
+- github page (https://www.freecodecamp.org/news/how-to-deploy-next-js-app-to-github-pages/#:~:text=Step%202%20%E2%80%93%20Configure%20the%20Next.&text=js%20uses%20Node.,static%20page%20generation%20in%20Next.)
+Bug fix: 
+- filename change from next.config.mjs to next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    basePath: "/weather-scan", // new
+    output: "export",          // new
+    reactStrictMode: true,     // new
+  };
+module.exports = nextConfig    // new
+// export default nextConfig;  // old
+  
+
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
