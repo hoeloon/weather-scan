@@ -90,7 +90,7 @@ export default function Home() {
         <div className="p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
           {current && (
             <div>
-            <p>Today's Weather</p>
+            <p>{`Today's Weather`}</p>
             <div className="flex justify-between items-end">
               <p className="text-6xl">{current?.data?.data?.main?.temp}°</p>
               <p></p>
