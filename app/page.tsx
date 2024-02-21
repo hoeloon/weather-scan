@@ -2,18 +2,19 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Input } from "@/components/ui/input"
-import { Search, Trash } from "lucide-react"
+import { AlertCircle, Search, Trash } from "lucide-react"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function Home() {
-  const [search, setSearch] = useState(false);
+  const [search, setSearch] = useState("");
   const [error, setError] = useState(false);
   const [current, setCurrent] = useState<any>({});
   const [histories, setHistories] = useState([])
   const [done, setDone] = useState(false)
 
-  const openWeatherMapAPIKey = process.env.REACT_APP_OPEN_WEATHER_MAP_APIKey
+  const openWeatherMapAPIKey = "a50ee6d2afa1eb2029d4ad931f75cfd7"
 
   const  getDateTime = () => {
     return new Date().toLocaleString() + ""
@@ -107,7 +108,18 @@ export default function Home() {
 
 
         </div>
+        <div className="bg-white bg-opacity-20 rounded-2xl">
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                Not Found
+              </AlertDescription>
+            </Alert>
+          )}
 
+        </div>
 
         {/* main content */}
         <div className="p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">

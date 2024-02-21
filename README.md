@@ -10,6 +10,9 @@ Theme switcher
 Icon
 - Lucide (https://lucide.dev/icons)
 
+Component library
+- Shadcn (https://ui.shadcn.com/)
+
 Component
 - Search
     Input Box, Search Button
