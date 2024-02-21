@@ -7,6 +7,9 @@ CSS Framework
 Theme switcher
 - next-themes (https://www.npmjs.com/package/next-themes)
 
+Icon
+- Lucide (https://lucide.dev/icons)
+
 Component
 - Search
     Input Box, Search Button
