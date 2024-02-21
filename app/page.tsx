@@ -11,32 +11,59 @@ export default function Home() {
   const [error, setError] = useState(false);
   const [current, setCurrent] = useState<any>({});
   const [histories, setHistories] = useState([])
+  const [done, setDone] = useState(false)
+
+  const openWeatherMapAPIKey = process.env.REACT_APP_OPEN_WEATHER_MAP_APIKey
 
   const  getDateTime = () => {
     return new Date().toLocaleString() + ""
   }
 
-  const handleDelete = (e:any) => {
-    const value1 = e.currentTarget.getAttribute("data-value")
-    console.log(value1)
-    var tempLocalStorage = localStorage.getItem("history")
-    var tempHistories = []
-    if (tempLocalStorage !== null){
-      tempHistories = JSON.parse(tempLocalStorage)
-    }
-    const idx = tempHistories.indexOf(value1);
-    tempHistories.splice(idx, idx !== -1 ? 1 : 0);
+  const insertHistories = (item: any) => {
+    var tempHistories = getHistories()
+    tempHistories.push(item)
     localStorage.setItem('history', JSON.stringify(tempHistories))
   }
 
-   function handleSearch() {
-    console.log(search)
+  const getHistories = () => {
+    
+    var tempLocalStorage = localStorage.getItem("history")
+    var histories = []
+    if (tempLocalStorage !== null){
+      histories = JSON.parse(tempLocalStorage)
+    }
+    setDone(!done)
+    return histories
+  }
+  
+  const handleDelete = (e:any) => {
+    
+    const index = e.currentTarget.getAttribute("data-value")
 
+    var tempHistories = getHistories()
+    const reducedArr = [...tempHistories];
+    reducedArr.splice(index, 1);
+    localStorage.setItem('history', JSON.stringify(reducedArr))
+    setDone(!done)
+  }
+
+   function handleSearch(e: any) {
+    
+    const country = e.currentTarget.getAttribute("data-value")
+    console.log("country", country)
+    if(country !== null){
+      setSearch(country)
+    }
+    console.log("search", search)
     axios
-    .get(`https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=a50ee6d2afa1eb2029d4ad931f75cfd7`)
-    .then(data => {
-      console.log(data.data)
+    .get(`https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=${openWeatherMapAPIKey}`)
+    .then((data: any) => {
       setError(false)
+      if(data?.name === "False"){
+        console.log(error)
+        setError(true)
+        return
+      }
       const temp = {
         data,
         datetime: getDateTime()
@@ -45,21 +72,16 @@ export default function Home() {
         data,
         datetime: getDateTime()
       })
-      console.log("temp", temp)
-      console.log("current", current)
-      var tempLocalStorage = localStorage.getItem("history")
-      var tempHistories = []
-      if (tempLocalStorage !== null){
-        tempHistories = JSON.parse(tempLocalStorage)
-      }
-      tempHistories.push(temp)
-      localStorage.setItem('history', JSON.stringify(tempHistories))
+      insertHistories(temp)
+      setDone(!done)
     })
     .catch(error => {
       console.log(error)
       setError(true)
     });
   };
+
+
   useEffect(() => {
     var tempLocalStorage = localStorage.getItem("history")
     var histories = []
@@ -67,7 +89,8 @@ export default function Home() {
       histories = JSON.parse(tempLocalStorage)
     }
     setHistories(histories)
-  },[]);
+    console.log("useEffect")
+  },[done]);
   
 
   return (
@@ -88,12 +111,13 @@ export default function Home() {
 
         {/* main content */}
         <div className="p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
-          {current && (
+          {current?.data ?
+           (
             <div>
             <p>{`Today's Weather`}</p>
             <div className="flex justify-between items-end">
               <p className="text-6xl">{current?.data?.data?.main?.temp}°</p>
-              <p></p>
+              <p>{current?.data?.data?.weather[0]?.description}</p>
             </div>
             <div className="flex justify-between items-end">
               <p>H: {current?.data?.data?.main?.temp_max }° L: {current?.data?.data?.main?.temp_min  }°</p>
@@ -104,7 +128,8 @@ export default function Home() {
               <p>{current?.datetime}</p>
             </div>
           </div>
-          )}
+          ):
+          <p>no search</p>}
 
 
 
@@ -114,11 +139,11 @@ export default function Home() {
             {histories && histories.map((item: any, index) => (
               <div className="flex justify-between p-5 bg-white bg-opacity-20 rounded-2xl" key={index}>
               <div flex-col>
-                <p>{item.data.data.name}, {item.data.data.sys.country}{index}</p>
+                <p>{item.data.data.name}, {item.data.data.sys.country}</p>
                 <p>{item.datetime}</p>
               </div>
               <div className="flex pr-2">
-                <Button className="btn rounded-full">
+                <Button className="btn rounded-full" data-value={item.data.data.name} onClick={handleSearch}>
                   <Search className="h-4 w-4" />
                 </Button>
                 <Button className="btn rounded-full" data-value={index} onClick={handleDelete}>
