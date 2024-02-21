@@ -37,17 +37,12 @@
   [data-theme="light"] body {
     background-image: url("../public/bg-light.png");
     color: black;
-    .searchBtn{
-      background-color: #5628a6;
-    }
+
   }
   [data-theme="dark"] body {
     background-image: url("../public/bg-dark.png");
     color: white;
-    .searchBtn{
-      background-color: black;
-      color: white
-    }
+
   }
 }
  

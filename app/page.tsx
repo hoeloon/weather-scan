@@ -78,7 +78,7 @@ export default function Home() {
         <div className="flex-auto">
 
             <Input onChange={(e: any) => setSearch(e.target.value)}/>
-            <Button className="searchBtn rounded-2xl" onClick={handleSearch}>
+            <Button className="rounded-2xl" onClick={handleSearch}>
               <Search className="h-4 w-4" />
             </Button>
 
