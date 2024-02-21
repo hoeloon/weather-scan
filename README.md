@@ -21,7 +21,8 @@ Component
 - History Item
     City, Country, Datetime, Search Button, Delete Button
 
-
+deployment
+- github page (https://blog.logrocket.com/deploying-react-apps-github-pages/)
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
