@@ -15,13 +15,14 @@ const ThemeSwitcher = () => {
   }
 
   return (
-    <div>
-      <p>The current theme is: {theme}</p>
-        <select value={theme} onChange={e => setTheme(e.target.value)}>
-            <option value="system">System</option>
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-        </select>
+    <div className="flex justify-end p-3">
+        <label className="switch">
+        <input type="checkbox" id="theme-switcher" onChange={(event)=>{
+          if(event.currentTarget.checked) setTheme("dark")
+          else setTheme("light")
+        }}/>
+        <span className="slider round"></span>
+      </label>
     </div>
   );
 };

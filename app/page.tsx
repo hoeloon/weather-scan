@@ -48,18 +48,12 @@ export default function Home() {
     setDone(!done)
   }
 
-   function handleSearch(e: any) {
-    
-    const country = e.currentTarget.getAttribute("data-value")
-    console.log("country", country)
-    if(country !== null){
-      setSearch(country)
-    }
-    console.log("search", search)
+  const getWeather = (country: string) => {
     axios
-    .get(`https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=${openWeatherMapAPIKey}`)
+    .get(`https://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${openWeatherMapAPIKey}`)
     .then((data: any) => {
       setError(false)
+      setSearch("")
       if(data?.name === "False"){
         console.log(error)
         setError(true)
@@ -80,7 +74,19 @@ export default function Home() {
       console.log(error)
       setError(true)
     });
+  }
+
+  function handleSearch(e: any) {
+    getWeather(search)
   };
+
+  const handleHistorySearch = (e: any) => {
+    const country = e.currentTarget.getAttribute("data-value")
+    if(country !== ""){
+      setSearch(country)
+    }
+    getWeather(country)
+  }
 
 
   useEffect(() => {
@@ -90,18 +96,15 @@ export default function Home() {
       histories = JSON.parse(tempLocalStorage)
     }
     setHistories(histories)
-    console.log("useEffect")
   },[done]);
   
-
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-128 ">
+    <div className="flex justify-center items-top h-screen">
+      <div className="w-128  space-y-4">
 
         {/* search bar */}
-        <div className="flex-auto">
-
-            <Input onChange={(e: any) => setSearch(e.target.value)}/>
+        <div className="flex flex-row  space-x-4">
+            <Input className="box" value={search} onChange={(e: any) => setSearch(e.target.value)}/>
             <Button className="rounded-2xl" onClick={handleSearch}>
               <Search className="h-4 w-4" />
             </Button>
@@ -110,7 +113,7 @@ export default function Home() {
         </div>
         <div className="bg-white bg-opacity-20 rounded-2xl">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="rounded-2xl">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>
@@ -122,72 +125,65 @@ export default function Home() {
         </div>
 
         {/* main content */}
-        <div className="p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
+        <div className="flex p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
+          <div className="p-6">
+            <p className="font-bold">{`Today's Weather`}</p>
+          </div>
           {current?.data ?
            (
-            <div>
-            <p>{`Today's Weather`}</p>
-            <div className="flex justify-between items-end">
-              <p className="text-6xl">{current?.data?.data?.main?.temp}°</p>
-              <p>{current?.data?.data?.weather[0]?.description}</p>
+            <div className="p-6">
+              {/* Today's Weather */}
+
+              
+              <div className="flex justify-between items-end">
+                <p className="text-6xl">{current?.data?.data?.main?.temp.toFixed(0)}°</p>
+                <p className="capitalize">{current?.data?.data?.weather[0]?.description}</p>
+              </div>
+              <div className="flex justify-between items-end">
+                <p>H: {current?.data?.data?.main?.temp_max}° L: {current?.data?.data?.main?.temp_min}°</p>
+                <p>Humidity: {current?.data?.data?.main?.humidity}%</p>
+              </div>
+              <div className="flex justify-between items-end">
+                <p>{current?.data?.data?.name}, {current?.data?.data?.sys?.country}</p>
+                <p>{current?.datetime}</p>
+              </div>
             </div>
-            <div className="flex justify-between items-end">
-              <p>H: {current?.data?.data?.main?.temp_max }° L: {current?.data?.data?.main?.temp_min  }°</p>
-              <p>Humidity: {current?.data?.data?.main?.humidity}%</p>
-            </div>
-            <div className="flex justify-between items-end">
-              <p>{current?.data?.data?.name}, {current?.data?.data?.sys?.country}</p>
-              <p>{current?.datetime}</p>
-            </div>
-          </div>
           ):
-          <p>no search</p>}
+            <p>No Result</p>
+          }
 
 
-
-          <div className="flex flex-col p-5 bg-white bg-opacity-20 rounded-2xl ">
-            <div><p>search History</p></div>
-            
-            {histories && histories.map((item: any, index) => (
-              <div className="flex justify-between p-5 bg-white bg-opacity-20 rounded-2xl" key={index}>
-              <div flex-col>
-                <p>{item.data.data.name}, {item.data.data.sys.country}</p>
-                <p>{item.datetime}</p>
-              </div>
-              <div className="flex pr-2">
-                <Button className="btn rounded-full" data-value={item.data.data.name} onClick={handleSearch}>
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button className="btn rounded-full" data-value={index} onClick={handleDelete}>
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </div>
+          {/* Search History */}
+          <div className="flexs p-5 bg-white bg-opacity-20 rounded-2xl ">
+            <div className="pb-6">
+              <p className="font-bold">Search History</p>
             </div>
-            ))}
+            <div className="flex flex-col-reverse space-y-4 space-y-reverse ">
+              {histories && histories.map((item: any, index) => (
+                <div className="flex justify-between p-3 bg-white bg-opacity-20 rounded-2xl" key={index}>
 
+                    <div className="">
+                      <p className="font-medium">{item.data.data.name}, {item.data.data.sys.country}</p>
+                      <p className="text-xs">{item.datetime}</p>
+                    </div>
+                    <div className="flex pr-2 space-x-1">
+                      <Button className="btn rounded-full" data-value={item.data.data.name} onClick={handleHistorySearch}>
+                        <Search className="h-4 w-4" />
+                      </Button>
+                      <Button className="btn rounded-full" data-value={index} onClick={handleDelete}>
+                        <Trash className="h-4 w-4" />
+                      </Button>
+
+                  </div>
+                </div>
+              ))
+              }
+            </div>
 
           </div>
         </div>
         
       </div>
-      
-      {/* <div className="max-w-2xl bg-slate-500">
-        <SearchBar/>
-        <div className="rounded-sm bg-slate-800 p-10">
-          <p>Today's Weather</p>
-          <h1>26</h1>
-
-        </div>
-        <Button variant="light">Click</Button>
-        <Image
-                src="weather-scan/vercel.svg"
-                alt="Vercel Logo"
-                className="dark:invert"
-                width={100}
-                height={24}
-                priority
-              />
-      </div> */}
 
     </div>
   );

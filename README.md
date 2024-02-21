@@ -1,8 +1,10 @@
+Demo: https://hoeloon.github.io/weather-scan/
+
 React Framework 
 - NextJS
 
 CSS Framework
-- Tailwind CSS
+- Tailwind CSS (https://tailwindcss.com/)
 
 Theme switcher
 - next-themes (https://www.npmjs.com/package/next-themes)
