@@ -22,7 +22,7 @@ Component
     City, Country, Datetime, Search Button, Delete Button
 
 deployment
-- github page (https://blog.logrocket.com/deploying-react-apps-github-pages/)
+- github page (https://medium.com/frontendweb/how-to-deploy-a-nextjs-app-to-github-pages-1de4f6ed762e)
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
