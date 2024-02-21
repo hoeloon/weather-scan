@@ -19,10 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>        
-      <Providers>
+        <Providers>
           <ThemeSwitcher />
           {children}
-        </Providers></body>
+        </Providers>
+      </body>
     </html>
   );
 }

@@ -1,13 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  color: #000;
-  background-color: #fff;
+ 
+@layer base {
+  :root {
+    background-image: url("../public/bg-light.png")
+  }
+ 
+  [data-theme="dark"]  {
+    background-image: url("../public/bg-dark.png")
+  }
 }
-
-[data-theme="dark"] body {
-  background-color: #000;
-  color: white;
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
