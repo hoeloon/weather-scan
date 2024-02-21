@@ -112,7 +112,7 @@ export default function Home() {
             <div><p>search History</p></div>
             
             {histories && histories.map((item: any, index) => (
-              <div className="flex justify-between p-5 bg-white bg-opacity-20 rounded-2xl">
+              <div className="flex justify-between p-5 bg-white bg-opacity-20 rounded-2xl" key={index}>
               <div flex-col>
                 <p>{item.data.data.name}, {item.data.data.sys.country}{index}</p>
                 <p>{item.datetime}</p>
