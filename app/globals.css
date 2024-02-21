@@ -45,6 +45,9 @@
     opacity: 0.5;
     color: black
   }
+  [data-theme="light"] .heading{
+    color: rgb(61, 23, 197)
+  }
 
   [data-theme="dark"] body {
     background-image: url("../public/bg-dark.png");
@@ -55,6 +58,9 @@
     background-color: black;
     border: none;
     opacity: 0.5;
+    color: white
+  }
+  [data-theme="dark"] .heading{
     color: white
   }
 }

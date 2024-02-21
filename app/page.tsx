@@ -6,6 +6,8 @@ import { AlertCircle, Search, Trash } from "lucide-react"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import cloud from "../public/cloud.png"
+import sun from "../public/sun.png"
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -88,7 +90,6 @@ export default function Home() {
     getWeather(country)
   }
 
-
   useEffect(() => {
     var tempLocalStorage = localStorage.getItem("history")
     var histories = []
@@ -100,12 +101,12 @@ export default function Home() {
   
   return (
     <div className="flex justify-center items-top h-screen">
-      <div className="w-128  space-y-4">
+      <div className="w-128 space-y-4 p-5">
 
         {/* search bar */}
-        <div className="flex flex-row  space-x-4">
-            <Input className="box" value={search} onChange={(e: any) => setSearch(e.target.value)}/>
-            <Button className="rounded-2xl" onClick={handleSearch}>
+        <div className="flex flex-row space-x-4">
+            <Input className="box" value={search} placeholder="Search" onChange={(e: any) => setSearch(e.target.value)}/>
+            <Button className="rounded-2xl box" onClick={handleSearch}>
               <Search className="h-4 w-4" />
             </Button>
 
@@ -125,19 +126,47 @@ export default function Home() {
         </div>
 
         {/* main content */}
-        <div className="flex p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
-          <div className="p-6">
+        <div className="flex flex-col p-6 shadow-lg bg-white bg-opacity-20 rounded-2xl">
+          <div className="">
             <p className="font-bold">{`Today's Weather`}</p>
+
           </div>
           {current?.data ?
            (
-            <div className="p-6">
+            <div className="pb-6">
               {/* Today's Weather */}
 
               
               <div className="flex justify-between items-end">
-                <p className="text-6xl">{current?.data?.data?.main?.temp.toFixed(0)}°</p>
-                <p className="capitalize">{current?.data?.data?.weather[0]?.description}</p>
+                <p className="text-8xl heading">{current?.data?.data?.main?.temp.toFixed(0)}°</p>
+                <div className="flex flex-col justify-end">
+                  {
+                    current?.data?.data?.weather[0]?.description.toLowerCase().includes("cloud") ?
+                      <Image
+                        src={cloud}
+                        alt="cloud"
+                        className="dark:invert"
+                        width={100}
+                        height={24}
+                        priority
+                      />
+                    :
+                      <Image
+                        src={sun}
+                        alt="sun"
+                        className="dark:invert"
+                        width={100}
+                        height={24}
+                        priority
+                      />
+                    
+                  }
+                  <div className="flex flex-row justify-end">
+                  <p className="capitalize">{current?.data?.data?.weather[0]?.description}</p>
+                  </div>
+                  
+                </div>
+                
               </div>
               <div className="flex justify-between items-end">
                 <p>H: {current?.data?.data?.main?.temp_max}° L: {current?.data?.data?.main?.temp_min}°</p>
@@ -149,7 +178,7 @@ export default function Home() {
               </div>
             </div>
           ):
-            <p>No Result</p>
+            <p className="pb-6">No Result</p>
           }
 
 
@@ -167,11 +196,11 @@ export default function Home() {
                       <p className="text-xs">{item.datetime}</p>
                     </div>
                     <div className="flex pr-2 space-x-1">
-                      <Button className="btn rounded-full" data-value={item.data.data.name} onClick={handleHistorySearch}>
-                        <Search className="h-4 w-4" />
+                      <Button className="btn rounded-full box" data-value={item.data.data.name} onClick={handleHistorySearch}>
+                        <Search className="h-3 w-3" />
                       </Button>
-                      <Button className="btn rounded-full" data-value={index} onClick={handleDelete}>
-                        <Trash className="h-4 w-4" />
+                      <Button className="btn rounded-full box" data-value={index} onClick={handleDelete}>
+                        <Trash className="h-3 w-3" />
                       </Button>
 
                   </div>
